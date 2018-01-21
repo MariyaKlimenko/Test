@@ -9,8 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="allow-category-form-{{ $user->id }}" action="{{ route('allowCategory') }}" method="POST" >
-                    <input type="hidden" name="user" value="{{ $user->id }}">
+                <form id="allow-category-form-{{ $user->id }}" action="{{ route('allowCategory', ['user' => $user->id]) }}" method="POST" >
                     @foreach($categories as $category)
                         <div class="form-check offset-md-1">
                             <input class="form-check-input"

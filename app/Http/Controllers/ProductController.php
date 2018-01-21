@@ -14,13 +14,9 @@ class ProductController extends Controller
     public function add(AddProductRequest $request)
     {
         $product = Product::create(['name' => $request->input('productnamefield')]);
-        $categories = Category::all();
+        $categoryIds =  array_values($request->except('_token', 'productnamefield'));
+        $product->categories()->sync($categoryIds);
 
-        foreach ($categories as $category){
-            if($request->has($category->name)){
-               $category->products()->attach($product);
-            }
-        }
         return response()->json(['responseText' => 'Success!', 'request' => $request], 200);
     }
 

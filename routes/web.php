@@ -20,4 +20,4 @@ Route::post('add/product', 'ProductController@add')->name('addProduct');
 
 Route::post('add/category', 'CategoryController@add')->name('addCategory');
 
-Route::post('allow', 'CategoryController@allow')->name('allowCategory');
+Route::post('users/{user}/allow', 'UserController@allow')->name('allowCategory');
