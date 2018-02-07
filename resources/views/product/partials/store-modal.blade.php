@@ -1,23 +1,18 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addProductModal">
-    Add +
-</button>
-<br><br>
-<!-- Modal -->
-<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="add-product-modal" tabindex="-1" role="dialog" aria-labelledby="add-product-modal-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addProductModalLabel">Add product</h5>
+                <h5 class="modal-title" id="add-product-modal-label">Add product</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="add-product-form" action="{{ route('addProduct') }}" method="POST" >
+                <form id="add-product-form" action="{{ route('storeProduct') }}" method="POST" >
                     <div class="form-group">
-                        <label for="addProductName">Enter name</label>
-                        <input type="text" class="form-control"   name="productnamefield" id="addProductName" placeholder="Enter name">
+                        <label for="add-product-name">Enter name</label>
+                        <input type="text" class="form-control"   name="product-name" id="add-product-name" placeholder="Enter name">
                     </div>
                     @foreach($categories as $category)
                         <div class="form-check offset-md-1">
@@ -27,10 +22,9 @@
                             </label>
                         </div>
                     @endforeach
-
                     {{ csrf_field() }}
                 </form>
-                <div class="" id="error"></div>
+                <div class="" id="store-product-error"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -40,22 +34,17 @@
     </div>
 </div>
 <script>
+
     $('#add-but').on('click', function () {
 
-        var checks = $('.form-check-input');
-        var isAnyChecked = false;
-        for(var i = 0; i < checks.length; i++){
-            if(checks[i].checked == true) {
-                isAnyChecked = true
-            }
-        }
+        let isChecked = $('#add-product-form').find('.form-check-input:checked').length > 0;
+        if(isChecked){
 
-        if(isAnyChecked){
             const data = $('body #add-product-form').serializeArray();
 
             $.ajax({
                 type: 'POST',
-                url: '/add/product',
+                url: '/product/store',
                 data: data,
                 dataType: 'json',
                 success: function () {
@@ -66,8 +55,7 @@
                 }
             });
         }else {
-            $('#error').addClass('alert alert-danger').html("No one category is checked.");
-
+            $('#store-product-error').addClass('alert alert-danger').html("No one category is checked.");
         }
     });
 </script>
