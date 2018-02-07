@@ -15,12 +15,24 @@ class CreateUserCategoryTable extends Migration
     {
         Schema::create('user_category', function (Blueprint $table) {
 
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')
-                ->on('users');
-            $table->integer('category_id')->unsigned()->nullable();
-            $table->foreign('category_id')->references('id')
-                ->on('categories');
+            $table->integer('user_id')
+                  ->unsigned()
+                  ->nullable();
+
+            $table->foreign('user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade');
+
+            $table->integer('category_id')
+                  ->unsigned()
+                  ->nullable();
+
+            $table->foreign('category_id')
+                  ->references('id')
+                  ->on('categories')
+                  ->onDelete('cascade');
+
             $table->timestamps();
         });
     }

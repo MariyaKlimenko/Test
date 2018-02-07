@@ -4,16 +4,37 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Category;
 
 class UserController extends Controller
 {
-    public function allow(User $user, Request $request)
+    /**
+     * Update user permission to categories.
+     * @param User $user
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function update(User $user, Request $request)
     {
-        $categoryIds = array_values($request->except('_token'));
+        if (auth()->user()->hasRole('admin')) {
+            $categoryIds = array_values($request->except('_token'));
 
-        $user->categories()->sync($categoryIds);
+            $user->categories()->sync($categoryIds);
+        }
 
         return redirect('/');
+    }
+
+    /**
+     * Delete user
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    public function delete(User $user)
+    {
+        if (auth()->user()->hasRole('admin')) {
+            $user->delete();
+        }
+        return back();
     }
 }

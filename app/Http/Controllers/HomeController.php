@@ -27,31 +27,29 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-        if(Auth()->user()->isAdmin()){
+        if (auth()->user()->isAdmin()) {
             $users = User::where('id', '!=', Auth()->user()->id)->get();
             $categories = Category::all();
             $products = Product::all();
-            $data = [
-                'users' => $users,
-                'categories' => $categories,
-                'products' => $products
-            ];
-        } else {
-            $categories = Auth()->user()->categories;
-            $products = collect();
-            foreach($categories as $category) {
-                foreach($category->products as $product) {
-                    $products->push($product);
-                }
-            }
-            $data = [
-                'categories' => $categories,
-                'products' => $products
-            ];
+
+            return view('user.home', [
+                'users'         => $users,
+                'categories'    => $categories,
+                'products'      => $products
+            ]);
         }
+        $categories = Auth()->user()->categories;
+        $productIds = \DB::table('category_product')
+                ->select('product_id')
+                ->whereIn('category_id', $categories->pluck('id')->toArray())
+                ->distinct()
+                ->get();
 
-        return view('user.home', $data);
+        $products = Product::findMany($productIds->pluck('product_id')->toArray());
+
+        return view('user.home', [
+                'categories'    => $categories,
+                'products'      => $products
+        ]);
     }
-
 }
