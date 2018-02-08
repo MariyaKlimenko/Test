@@ -17,9 +17,8 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        if (auth()->user->hasRole('admin')) {
-            Category::create($request->all());
-        }
+        Category::create($request->all());
+
         return back();
     }
 
@@ -31,9 +30,8 @@ class CategoryController extends Controller
      */
     public function delete(Category $category)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $category->delete();
-        }
+        $category->delete();
+
         return back();
     }
 
@@ -49,6 +47,37 @@ class CategoryController extends Controller
             $category->update($request->all());
         }
 
-        return redirect('/');
+        return redirect()->route('home');
+    }
+
+    /**
+     * Returns modal for creating new category.
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function getStoreModalPartial()
+    {
+        return response()->json(['success' => true,
+                'html' => view('category.partials.store-modal')->render()]);
+    }
+
+    /**
+     * Returns modal for updating category.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function getUpdateModalPartial(Request $request)
+    {
+        $category = Category::find($request->input('id'));
+
+        if ($category) {
+            return response()->json(['success' => true,
+                'html' => view('category.partials.update-modal', [
+                    'category' => $category
+                ])->render()]);
+        }
+
+        return response()->json(['success' => false]);
     }
 }

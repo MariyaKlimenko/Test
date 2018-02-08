@@ -22,7 +22,10 @@
         <div class="tab-content">
             <div class="tab-pane" id="categories" role="tabpanel" aria-labelledby="categories-tab">
                 @role('admin')
-                    @include('category.partials.store-modal')
+                <button type="button" id="add-category-button" class="btn btn-primary btn-sm" >
+                    Add +
+                </button>
+                <br><br>
                 @endrole
                 @foreach($categories as $category)
                     <p>{{$category->name}}
@@ -30,10 +33,9 @@
                         <a href="{{ route('deleteCategory', ['user' => $category->id]) }}">
                             delete
                         </a>
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#update-category-modal-{{ $category->id }}">
+                        <button type="button" class="update-category-button btn btn-primary btn-sm" data-id="{{ $category->id }}">
                             edit
                         </button>
-                        @include('category.partials.update-modal')
                         @endrole
                     </p>
                 @endforeach
@@ -41,7 +43,7 @@
 
             <div class="tab-pane" id="products" role="tabpanel" aria-labelledby="products-tab">
                 @role('admin')
-                <button type="button" id="add-product-but" class="btn btn-primary btn-sm" >
+                <button type="button" id="add-product-button" class="btn btn-primary btn-sm" >
                     Add +
                 </button>
                 <br><br>
@@ -59,7 +61,7 @@
                          <a href="{{ route('deleteProduct', ['product' => $product->id]) }}">
                              delete
                          </a>
-                         <button type="button" class="update-product-but btn btn-primary btn-sm" data-id="{{ $product->id }}">
+                         <button type="button" class="update-product-button btn btn-primary btn-sm" data-id="{{ $product->id }}">
                              edit
                          </button>
                          @endrole
@@ -70,18 +72,14 @@
             <div class="tab-pane active" id="users" role="tabpanel" aria-labelledby="users-tab">
                 @foreach($users as $user)
                     <p>
-
                         {{$user->name}}
                         <a href="{{ route('deleteUser', ['user' => $user->id]) }}">
                             delete
                         </a>
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#update-user-category-modal-{{ $user->id }}">
+                        <button type="button" class="update-user-category-button btn btn-primary btn-sm" data-id="{{ $user->id }}">
                             Categories
                         </button>
                     </p>
-{{--
-                    @include('user.partials.update-user-category')
---}}
                 @endforeach
             </div>
             @endrole
@@ -92,6 +90,9 @@
     <script>
         $(function () {
 
+            /**
+             * Ajax function gets modal for creating new Product.
+             */
             function showStoreProductModal() {
                 $.ajax({
                     url: "product/getStoreModal",
@@ -102,6 +103,26 @@
                     }
                 });
             }
+
+            /**
+             * Ajax function gets modal for creating new category.
+             */
+            function showStoreCategoryModal() {
+                $.ajax({
+                    url: "category/getStoreModal",
+                    type: "get",
+                    success: function(data) {
+                        console.log('lk');
+                        $('#modal-place').html(data.html);
+                        $('#add-category-modal').modal('show');
+                    }
+                });
+            }
+
+            /**
+             * Ajax function gets modal for updating Product.
+             * @param id
+             */
             function showUpdateProductModal(id) {
                 $.ajax({
                     url: "product/getUpdatePartial",
@@ -116,12 +137,60 @@
                 });
             }
 
-            $('#add-product-but').on('click', function () {
+            /**
+             * Ajax function gets modal for updating Category.
+             * @param id
+             */
+            function showUpdateCategoryModal(id) {
+                $.ajax({
+                    url: "category/getUpdatePartial",
+                    type: "get",
+                    data: {
+                        id
+                    },
+                    success: function(data) {
+                        $('#modal-place').html(data.html);
+                        $('#update-category-modal').modal('show');
+                    },
+                });
+            }
+
+            /**
+             * Ajax function gets modal for updating User`s categories.
+             * @param id
+             */
+            function showUpdateUserCategoryModal(id) {
+                $.ajax({
+                    url: "user/getUpdateCategoriesPartial",
+                    type: "get",
+                    data: {
+                        id
+                    },
+                    success: function(data) {
+                        $('#modal-place').html(data.html);
+                        $('#update-user-category-modal').modal('show');
+                    },
+                });
+            }
+
+            $('#add-product-button').on('click', function () {
                 showStoreProductModal();
             });
-            $('.update-product-but').on('click', function () {
-                console.log($(this).data('id'));
+
+            $('#add-category-button').on('click', function () {
+                showStoreCategoryModal();
+            });
+
+            $('.update-product-button').on('click', function () {
                 showUpdateProductModal($(this).data('id'));
+            });
+
+            $('.update-category-button').on('click', function () {
+                showUpdateCategoryModal($(this).data('id'));
+            });
+
+            $('.update-user-category-button').on('click', function () {
+                showUpdateUserCategoryModal($(this).data('id'));
             });
 
             $('#myTab li:last-child a').tab('show')

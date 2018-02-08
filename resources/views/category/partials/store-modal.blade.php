@@ -1,10 +1,5 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#store-category-modal">
-    Add +
-</button>
-<br><br>
-<!-- Modal -->
-<div class="modal fade" id="store-category-modal" tabindex="-1" role="dialog" aria-labelledby="store-category-modal-label" aria-hidden="true">
+
+<div class="modal fade" id="add-category-modal" tabindex="-1" role="dialog" aria-labelledby="store-category-modal-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -24,10 +19,17 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="event.preventDefault();
-                                        document.getElementById('store-category-form').submit();" class="btn btn-primary">
+                <button type="button" id="submit-store-category-button" class="btn btn-primary">
                     Add</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+       $('#submit-store-category-button').on('click', function () {
+           $('#store-category-form').submit();
+       })
+    });
+</script>

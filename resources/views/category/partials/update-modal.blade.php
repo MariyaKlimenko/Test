@@ -1,9 +1,9 @@
 
-<div class="modal fade" id="update-category-modal-{{ $category->id }}" tabindex="-1" role="dialog" aria-labelledby="update-category-modal-label" aria-hidden="true">
+<div class="modal fade" id="update-category-modal" tabindex="-1" role="dialog" aria-labelledby="update-category-modal-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="update-category-modal-label">Add category</h5>
+                <h5 class="modal-title" id="update-category-modal-label">Edit category</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -19,10 +19,17 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="event.preventDefault();
-                                        document.getElementById('update-category-form').submit();" class="btn btn-primary">
+                <button type="button" id="submit-update-category-button" class="btn btn-primary">
                     save</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        $('#submit-update-category-button').on('click', function () {
+            $('#update-category-form').submit();
+        })
+    });
+</script>

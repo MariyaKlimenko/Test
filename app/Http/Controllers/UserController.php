@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -15,13 +16,11 @@ class UserController extends Controller
      */
     public function update(User $user, Request $request)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $categoryIds = array_values($request->except('_token'));
+        $categoryIds = array_values($request->except('_token'));
 
-            $user->categories()->sync($categoryIds);
-        }
+        $user->categories()->sync($categoryIds);
 
-        return redirect('/');
+        return redirect()->route('home');
     }
 
     /**
@@ -32,9 +31,30 @@ class UserController extends Controller
      */
     public function delete(User $user)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $user->delete();
-        }
+        $user->delete();
+
         return back();
+    }
+
+    /**
+     * Returns modal for updating user`s categories.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function getUpdateModalPartial(Request $request)
+    {
+        $categories = Category::all();
+        $user = User::find($request->input('id'));
+
+        if ($user) {
+            return response()->json(['success' => true,
+                'html' => view('user.partials.update-user-category', [
+                    'categories' => $categories,
+                    'user'   => $user
+                ])->render()]);
+        }
+
+        return response()->json(['success' => false]);
     }
 }

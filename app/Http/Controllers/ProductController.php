@@ -18,13 +18,12 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $product = Product::create(['name' => $request->input('product-name')]);
-            $categoryIds =  array_values($request->except('_token', 'product-name'));
-            $product->categories()->sync($categoryIds);
-            return response()->json(['responseText' => 'Success!'], 200);
-        }
-        return response()->json(['responseText' => 'error!'], 404);
+        $product = Product::create(['name' => $request->input('product-name')]);
+        $categoryIds =  array_values($request->except('_token', 'product-name'));
+
+        $product->categories()->sync($categoryIds);
+
+        return response()->json(['responseText' => 'Success!'], 200);
     }
 
     /**
@@ -35,9 +34,8 @@ class ProductController extends Controller
      */
     public function delete(Product $product)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $product->delete();
-        }
+        $product->delete();
+
         return back();
     }
 
@@ -49,40 +47,47 @@ class ProductController extends Controller
      */
     public function update(Product $product, Request $request)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $categoryIds = array_values($request->except('_token', 'product-name'));
+        $categoryIds = array_values($request->except('_token', 'product-name'));
 
-            $product->categories()->sync($categoryIds);
-            $product->update(['name' => $request->input('product-name')]);
-        }
+        $product->categories()->sync($categoryIds);
+        $product->update(['name' => $request->input('product-name')]);
 
-        return redirect('/');
+        return redirect()->route('home');
     }
 
+    /**
+     * Rreturns modal for creating new product.
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
     public function getStoreModalPartial()
     {
-        if (auth()->user()->hasRole('admin')) {
-            $categories = Category::all();
-            return response()->json(['success' => true,
-                'html' => view('product.partials.store-modal',
-                    ['categories' => $categories])->render()]);
-        }
-        return response()->json(['success' => false]);
+        $categories = Category::all();
+
+        return response()->json(['success' => true,
+            'html' => view('product.partials.store-modal',
+                ['categories' => $categories])->render()]);
     }
 
+    /**
+     * Returns modal for updating product.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
     public function getUpdateModalPartial(Request $request)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $categories = Category::all();
-            $product = Product::find($request->input('id'));
-            if ($product) {
-                return response()->json(['success' => true,
-                    'html' => view('product.partials.update-modal', [
-                        'categories' => $categories,
-                        'product'   => $product
-                    ])->render()]);
-            }
+        $categories = Category::all();
+        $product = Product::find($request->input('id'));
+
+        if ($product) {
+            return response()->json(['success' => true,
+                'html' => view('product.partials.update-modal', [
+                    'categories' => $categories,
+                    'product'   => $product
+                ])->render()]);
         }
+
         return response()->json(['success' => false]);
     }
 }

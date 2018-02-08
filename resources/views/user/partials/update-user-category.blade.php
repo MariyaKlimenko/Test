@@ -1,5 +1,5 @@
 
-<div class="modal fade" id="update-user-category-modal-{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="update-user-category-modal" aria-hidden="true">
+<div class="modal fade" id="update-user-category-modal" tabindex="-1" role="dialog" aria-labelledby="update-user-category-modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="update-user-category-form-{{ $user->id }}" action="{{ route('updateUserCategory', ['user' => $user->id]) }}" method="POST" >
+                <form id="update-user-category-form" action="{{ route('updateUserCategory', ['user' => $user->id]) }}" method="POST" >
                     @foreach($categories as $category)
                         <div class="form-check offset-md-1">
                             <input class="form-check-input"
@@ -20,17 +20,23 @@
                             </label>
                         </div>
                     @endforeach
-
                     {{ csrf_field() }}
                 </form>
                 <div class="" id="error"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="event.preventDefault();
-                        document.getElementById('update-user-category-form-{{ $user->id }}').submit();" class="btn btn-primary">
+                <button type="button" id="submit-update-user-category-button" class="btn btn-primary">
                     Apply</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        $('#submit-update-user-category-button').on('click', function () {
+            $('#update-user-category-form').submit();
+        })
+    });
+</script>
