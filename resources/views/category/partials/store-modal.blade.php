@@ -25,11 +25,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(function () {
-       $('#submit-store-category-button').on('click', function () {
-           $('#store-category-form').submit();
-       })
-    });
-</script>

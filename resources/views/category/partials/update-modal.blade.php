@@ -25,11 +25,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(function () {
-        $('#submit-update-category-button').on('click', function () {
-            $('#update-category-form').submit();
-        })
-    });
-</script>

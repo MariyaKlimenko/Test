@@ -28,34 +28,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="add-but" class="btn btn-primary">Add</button>
+                <button type="button" id="submit-store-product-button" class="btn btn-primary">Add</button>
             </div>
         </div>
     </div>
 </div>
-<script>
-
-    $('#add-but').on('click', function () {
-
-        let isChecked = $('#add-product-form').find('.form-check-input:checked').length > 0;
-        if(isChecked){
-
-            const data = $('body #add-product-form').serializeArray();
-
-            $.ajax({
-                type: 'POST',
-                url: '/product/store',
-                data: data,
-                dataType: 'json',
-                success: function () {
-                    location.reload();
-                },
-                error: function (data) {
-                    $('#error').addClass('alert alert-danger').html(data.responseJSON.errors.productnamefield[0]);
-                }
-            });
-        }else {
-            $('#store-product-error').addClass('alert alert-danger').html("No one category is checked.");
-        }
-    });
-</script>

@@ -32,24 +32,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="save-but" class="btn btn-primary">
+                <button type="button" id="submit-update-product-button" class="btn btn-primary">
                     Apply</button>
             </div>
         </div>
     </div>
 </div>
-<script>
 
-    $(function() {
-
-        $('#save-but').on('click', function () {
-
-            let isChecked = $('#update-product-form').find('.form-check-input:checked').length > 0;
-            if(isChecked){
-                $('#update-product-form').submit();
-            }else {
-                $('#edit-product-error').addClass('alert alert-danger').html("No one category is checked.");
-            }
-        });
-    });
-</script>

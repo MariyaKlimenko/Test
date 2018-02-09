@@ -32,11 +32,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(function () {
-        $('#submit-update-user-category-button').on('click', function () {
-            $('#update-user-category-form').submit();
-        })
-    });
-</script>

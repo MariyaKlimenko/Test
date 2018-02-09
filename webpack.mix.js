@@ -17,3 +17,5 @@ const settings = {
 
 mix.js(settings.jsPath + 'app.js', 'public/js')
    .sass(settings.sassPath + 'app.scss', 'public/css');
+
+mix.js(settings.jsPath + 'app/home/main.js', 'public/js/app/home/main.js');
